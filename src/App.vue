@@ -150,14 +150,16 @@ const parse = () => {
 </script>
 
 <template>
-  <v-container fluid class="fill-height d-flex w-100">
-    <div class="fill-height d-flex flex-column w-100">
-      <h6>HTML</h6>
-      <textarea class="w-100 fill-height border" v-model="defaultHTML" />
-    </div>
-    <div class="fill-height d-flex flex-column w-100">
-      <h6>PUG Response</h6>
-      <textarea class="w-100 fill-height border" :value="result" />
-    </div>
-  </v-container>
+  <v-app>
+    <v-container fluid class="fill-height d-flex w-100">
+      <div class="fill-height d-flex flex-column w-100">
+        <h6>HTML</h6>
+        <textarea class="w-100 fill-height border" v-model="defaultHTML" />
+      </div>
+      <div class="fill-height d-flex flex-column w-100">
+        <h6>PUG Response</h6>
+        <textarea class="w-100 fill-height border" :value="result" />
+      </div>
+    </v-container>
+  </v-app>
 </template>
