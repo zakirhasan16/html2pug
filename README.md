@@ -1,4 +1,4 @@
-# vue-cms
+# Vue HTML2Pug 
 
 ## Project setup
 ```
