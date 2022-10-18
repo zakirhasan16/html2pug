@@ -84,8 +84,10 @@ const parse = () => {
     //! Text ise
     if(node.nodeType === 3) {
       let text = node.nodeValue.trim()
-      if(text.startsWith('\n')) {
-        text = `\n${addDepthSpaces(d)}${text.replaceAll('\n','')}`
+      if(text.match(/\n/)) {
+        text = text.replaceAll(/\n([^\n]*)/gi,m => {
+          return `\n${addDepthSpaces(d)}| ${m.replace(/\n/,'').trim()}`
+        }).trim()
       }
       result += text
     }
@@ -133,7 +135,7 @@ const parse = () => {
 
     if(tagName === 'zzzemplate') tagName = 'template'
 
-    return `${tagName}${el.id ? `#${el.id}` : ''}${classes ? `.${classes}` : ''}${attributes ? `(${attributes.match('\n') ? `\n${addDepthSpaces(d+1)}${attributes}\n${addDepthSpaces(d)}` : attributes})` : ''}`
+    return `${tagName}${el.id ? `#${el.id}` : ''}${classes ? `.${classes}` : ''}${attributes ? `(${attributes.match('\n') ? `\n${addDepthSpaces(d+1)}${attributes}\n${addDepthSpaces(d)}` : attributes})` : ''} `
   }
 
   elements.forEach(el => {
