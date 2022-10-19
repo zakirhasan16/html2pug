@@ -115,7 +115,12 @@ const parse = () => {
     let d = getNodeDepth(el)
 
     let excludedAttributes = ['class', 'id']
-    let attributes = [...el.attributes].filter(attr => !excludedAttributes.includes(attr.name)).map((attr) => `${attr.name}${attr.value ? `="${attr.value}"` : ''}`)
+    let attributes = [...el.attributes].filter(attr => !excludedAttributes.includes(attr.name)).map((attr) => {
+      let val = attr.value
+      if(val && val.match(/\n/g)) val = val.replaceAll(/\n/g, ' ').trim()
+
+      return `${attr.name}${val ? `="${val}"` : ''}`
+    })
     if(attributes.length >= 4) {
       attributes = attributes.join(`\n${addDepthSpaces(d+1)}`)
     } else {
