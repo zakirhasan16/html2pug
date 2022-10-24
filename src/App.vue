@@ -152,10 +152,10 @@ const parse = () => {
     if(tagName === 'zzzemplate') tagName = 'template'
 
     let result = `${tagName}${el.id ? `#${el.id}` : ''}${classes ? `.${classes}` : ''}${attributes ? `(${attributes.match('\n') ? `\n${addDepthSpaces(d+1)}${attributes}\n${addDepthSpaces(d)}` : attributes})` : ''} `
-    for(let changedKeyword of changedKeywords) {
-      if(result.match(changedKeyword.newVal)) {
+    if(changedKeywords.some(k => result.match(k.newVal))) {
+      changedKeywords.filter(k => result.match(k.newVal)).forEach(changedKeyword => {
         result = result.replaceAll(changedKeyword.newVal, changedKeyword.oldVal)
-      }
+      })
     }
 
     return result
