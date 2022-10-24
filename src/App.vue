@@ -10,6 +10,7 @@ const result = computed(() => {
 
 const parse = () => {
   let string = defaultHTML.value
+  let changedKeywords = []
 
   string = string.replaceAll(/<([^>]*)>/gm, m => {
     let { inner } = new RegExp(/<(?<inner>[^>]*)>/gm).exec(m)?.groups || {}
@@ -22,6 +23,11 @@ const parse = () => {
         if (tagName.match(/[A-Z][a-z]+/g)) {
           let newTagName = tagName.replaceAll(/[A-Z][a-z]+/g, m => `${ m.toLowerCase() }-`).slice(0, -1)
 
+          changedKeywords.push({
+            oldVal: tagName,
+            newVal: newTagName
+          })
+
           m = m.replace(tagName, newTagName)
         }
       }
@@ -33,6 +39,11 @@ const parse = () => {
       for (let attributeName of m.match(/([\w:\-@]+)(?=(="))/gm)) {
         if(attributeName.match(/[A-Z][a-z]+/g)) {
           let newAttributeName = attributeName.replaceAll(/[A-Z][a-z]+/g, m => `-${m.toLowerCase()}`)
+
+          changedKeywords.push({
+            oldVal: attributeName,
+            newVal: newAttributeName
+          })
 
           m = m.replace(attributeName, newAttributeName)
         }
@@ -140,7 +151,14 @@ const parse = () => {
 
     if(tagName === 'zzzemplate') tagName = 'template'
 
-    return `${tagName}${el.id ? `#${el.id}` : ''}${classes ? `.${classes}` : ''}${attributes ? `(${attributes.match('\n') ? `\n${addDepthSpaces(d+1)}${attributes}\n${addDepthSpaces(d)}` : attributes})` : ''} `
+    let result = `${tagName}${el.id ? `#${el.id}` : ''}${classes ? `.${classes}` : ''}${attributes ? `(${attributes.match('\n') ? `\n${addDepthSpaces(d+1)}${attributes}\n${addDepthSpaces(d)}` : attributes})` : ''} `
+    for(let changedKeyword of changedKeywords) {
+      if(result.match(changedKeyword.newVal)) {
+        result = result.replaceAll(changedKeyword.newVal, changedKeyword.oldVal)
+      }
+    }
+
+    return result
   }
 
   elements.forEach(el => {

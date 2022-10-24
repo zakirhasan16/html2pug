@@ -19,13 +19,6 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: Delete branch
-        uses: dawidd6/action-delete-branch@v3
-        with:
-          soft_fail: true
-          github_token: ${{github.token}}
-          branches: production-build
-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
